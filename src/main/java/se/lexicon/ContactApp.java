@@ -14,7 +14,8 @@ public class ContactApp {
 
     public static void main(String[] args) {
 
-        System.out.println("Contact Manager");
+        System.out.println("--------------------------------");
+        System.out.println("Welcome to Contact Manager");
 
         boolean running = true;
         while (running) {
@@ -51,6 +52,12 @@ public class ContactApp {
         System.out.print("Phone: ");
         String phone = scanner.nextLine();
 
+        if (!ValidationUtil.isValidContact(name, email, phone)) {
+            System.out.println("Invalid contact details.");
+            System.out.println("--------------------------------");
+            return;
+        }
+
         Contact contact =
                 new Contact(nextId++, name, email, phone);
 
@@ -61,8 +68,11 @@ public class ContactApp {
         List<Contact> contacts = repository.findAll();
         if (contacts.isEmpty()) {
             System.out.println("No contacts found.");
+            System.out.println("--------------------------------");
         } else {
             contacts.forEach(System.out::println);
+            System.out.println("Total contacts: " + contacts.size());
+            System.out.println("--------------------------------");
         }
     }
 
@@ -72,8 +82,10 @@ public class ContactApp {
         List<Contact> results = repository.searchContactsByName(name);
         if (results.isEmpty()) {
             System.out.println("No contacts found.");
+            System.out.println("--------------------------------");
         } else {
             results.forEach(System.out::println);
+            System.out.println("--------------------------------");
         }
     }
 
@@ -83,6 +95,7 @@ public class ContactApp {
         Contact contact = repository.findContactById(id);
         if (contact == null) {
             System.out.println("Contact not found.");
+            System.out.println("--------------------------------");
             return;
         }
 
@@ -95,6 +108,12 @@ public class ContactApp {
         System.out.print("New phone: ");
         String phone = scanner.nextLine();
 
+        if (!ValidationUtil.isValidContact(name, email, phone)) {
+            System.out.println("Invalid contact details.");
+            System.out.println("--------------------------------");
+            return;
+        }
+
         repository.updateContact(new Contact(id, name, email, phone));
     }
 
@@ -104,8 +123,10 @@ public class ContactApp {
         boolean deleted = repository.deleteContactById(id);
         if (deleted) {
             System.out.println("Contact deleted.");
+            System.out.println("--------------------------------");
         } else {
             System.out.println("Contact not found.");
+            System.out.println("--------------------------------");
         }
     }
 }

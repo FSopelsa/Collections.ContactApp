@@ -40,11 +40,21 @@ public class ContactRepository {
     }
 
     public boolean updateContact(Contact updatedContact) {
+        Contact existingContact = findContactById(updatedContact.getId());
+
+        if (existingContact == null) {
+            return false;
+        }
+
+        existingContact.setName(updatedContact.getName());
+        existingContact.setEmail(updatedContact.getEmail());
+        existingContact.setPhoneNumber(updatedContact.getPhoneNumber());
+
         return true;
     }
 
     public boolean deleteContactById(int id) {
-        return true;
+        return contacts.removeIf(contact -> contact.getId() == id);
     }
 
 }
