@@ -1,7 +1,8 @@
-package se.lexicon;          //  <- Should this not be here?
+package se.lexicon;
 
-import static ContactApp.repository;          //  <- Should this be here?
-//"Implicitly declared class of a compact source file 'ContactApp' cannot be referenced"
+import java.util.Scanner;
+import java.util.List;
+
 
 public class ContactApp {
 
@@ -9,19 +10,18 @@ public class ContactApp {
     public static final ContactRepository repository =
             new ContactRepository();
 
-    public static void main(String[] args) {
-//"Method 'main()' does not have signature 'public static void main(String[])'
-//Method 'main(java.lang.String[])' is never used"
+    private static int nextId = 1;
 
+    public static void main(String[] args) {
+
+        System.out.println("Contact Manager");
 
         boolean running = true;
-
         while (running) {
 
-            showMenu();                     // "Cannot resolve method 'showMenu' in 'ContactApp'"
+            showMenu();
 
             switch (scanner.nextLine()) {
-
                 case "1" -> addContactMenu();
                 case "2" -> displayContactsMenu();
                 case "3" -> searchContactMenu();
@@ -31,72 +31,81 @@ public class ContactApp {
             }
         }
     }
-}
 
-private static void addContactMenu() {
-    System.out.print("Name: ");
-    String name = ContactApp.scanner.nextLine();          //  like this?
-
-    System.out.print("Email: ");
-    String email = scanner.nextLine();          //  import static constant`?
-
-    System.out.print("Phone: ");
-    String phone = scanner.nextLine();          //  import static constant`?
-
-    Contact contact =
-            new Contact(nextId++, name, email, phone);    //Should nextId be a local variable? declared where?
-
-    repository.addContact(contact);     // import static constant?
-}
-
-private static void displayContactsMenu() {
-    List<Contact> contacts = repository.findAll();     // import static constant?
-    if (contacts.isEmpty()) {
-        System.out.println("No contacts found.");
-    } else {
-        contacts.forEach(System.out::println);
-    }
-}
-
-private static void searchContactMenu() {
-    System.out.print("Enter name to search: ");
-    String name = ContactApp.scanner.nextLine();
-    List<Contact> results = repository.searchContactsByName(name);     // import static constant?
-    if (results.isEmpty()) {
-        System.out.println("No contacts found.");
-    } else {
-        results.forEach(System.out::println);
-    }
-}
-
-private static void updateContactMenu() {
-    System.out.print("Enter ID of contact to update: ");
-    int id = Integer.parseInt(ContactApp.scanner.nextLine());
-    Contact contact = repository.findContactById(id);     // import static constant?
-    if (contact == null) {
-        System.out.println("Contact not found.");
-        return;
+    private static void showMenu() {
+        System.out.println("1. Add contact");
+        System.out.println("2. Display contacts");
+        System.out.println("3. Search contact");
+        System.out.println("4. Update contact");
+        System.out.println("5. Delete contact");
+        System.out.println("6. Exit");
     }
 
-    System.out.print("New name: ");
-    String name = ContactApp.scanner.nextLine();
+    private static void addContactMenu() {
+        System.out.print("Name: ");
+        String name = scanner.nextLine();          //  like this?
 
-    System.out.print("New email: ");
-    String email = ContactApp.scanner.nextLine();
+        System.out.print("Email: ");
+        String email = scanner.nextLine();          //  import static constant`?
 
-    System.out.print("New phone: ");
-    String phone = ContactApp.scanner.nextLine();
+        System.out.print("Phone: ");
+        String phone = scanner.nextLine();          //  import static constant`?
 
-    repository.updateContact(new Contact(id, name, email, phone));     // import static constant?
-}
+        Contact contact =
+                new Contact(nextId++, name, email, phone);
 
-private static void deleteContactMenu() {
-    System.out.print("Enter ID of contact to delete: ");
-    int id = Integer.parseInt(ContactApp.scanner.nextLine());
-    boolean deleted = repository.deleteContactById(id);     // import static constant?
-    if (deleted) {
-        System.out.println("Contact deleted.");
-    } else {
-        System.out.println("Contact not found.");
+        repository.addContact(contact);     // import static constant?
+    }
+
+    private static void displayContactsMenu() {
+        List<Contact> contacts = repository.findAll();     // import static constant?
+        if (contacts.isEmpty()) {
+            System.out.println("No contacts found.");
+        } else {
+            contacts.forEach(System.out::println);
+        }
+    }
+
+    private static void searchContactMenu() {
+        System.out.print("Enter name to search: ");
+        String name = scanner.nextLine();
+        List<Contact> results = repository.searchContactsByName(name);     // import static constant?
+        if (results.isEmpty()) {
+            System.out.println("No contacts found.");
+        } else {
+            results.forEach(System.out::println);
+        }
+    }
+
+    private static void updateContactMenu() {
+        System.out.print("Enter ID of contact to update: ");
+        int id = Integer.parseInt(scanner.nextLine());
+        Contact contact = repository.findContactById(id);     // import static constant?
+        if (contact == null) {
+            System.out.println("Contact not found.");
+            return;
+        }
+
+        System.out.print("New name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("New email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("New phone: ");
+        String phone = scanner.nextLine();
+
+        repository.updateContact(new Contact(id, name, email, phone));     // import static constant?
+    }
+
+    private static void deleteContactMenu() {
+        System.out.print("Enter ID of contact to delete: ");
+        int id = Integer.parseInt(scanner.nextLine());
+        boolean deleted = repository.deleteContactById(id);     // import static constant?
+        if (deleted) {
+            System.out.println("Contact deleted.");
+        } else {
+            System.out.println("Contact not found.");
+        }
     }
 }

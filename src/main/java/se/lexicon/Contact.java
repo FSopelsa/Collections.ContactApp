@@ -1,7 +1,7 @@
 package se.lexicon;
 
 public class Contact {
-    private int id;
+    private final int id;
     private String name;
     private String email;
     private String phoneNumber;
@@ -13,5 +13,38 @@ public class Contact {
         this.phoneNumber = phoneNumber;
     }
 
-    // getters, setters, toString()
+    // ----------------------------------------- Getters
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return id + ": " + name + " | " + email + " | " + phoneNumber;
+    }
+
+    // ----------------------------------------- Setters
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
