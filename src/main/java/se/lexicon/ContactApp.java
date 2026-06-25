@@ -17,6 +17,8 @@ public class ContactApp {
         System.out.println("--------------------------------");
         System.out.println("Welcome to Contact Manager");
 
+        nextId = repository.getMaxId() + 1;
+
         boolean running = true;
         while (running) {
 
@@ -70,6 +72,7 @@ public class ContactApp {
             System.out.println("No contacts found.");
             System.out.println("--------------------------------");
         } else {
+            System.out.println("Contacts:");
             contacts.forEach(System.out::println);
             System.out.println("Total contacts: " + contacts.size());
             System.out.println("--------------------------------");
@@ -84,14 +87,25 @@ public class ContactApp {
             System.out.println("No contacts found.");
             System.out.println("--------------------------------");
         } else {
+            System.out.println("Search results:");
             results.forEach(System.out::println);
             System.out.println("--------------------------------");
         }
     }
 
+    private static int getIntInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+    }
+
     private static void updateContactMenu() {
-        System.out.print("Enter ID of contact to update: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = getIntInput("Enter ID of contact to update: ");
         Contact contact = repository.findContactById(id);
         if (contact == null) {
             System.out.println("Contact not found.");
@@ -118,8 +132,7 @@ public class ContactApp {
     }
 
     private static void deleteContactMenu() {
-        System.out.print("Enter ID of contact to delete: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = getIntInput("Enter ID of contact to delete: ");
         boolean deleted = repository.deleteContactById(id);
         if (deleted) {
             System.out.println("Contact deleted.");

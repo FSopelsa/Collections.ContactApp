@@ -1,6 +1,7 @@
 package se.lexicon;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ContactRepository {
@@ -8,18 +9,30 @@ public class ContactRepository {
     private final List<Contact> contacts = new ArrayList<>();
 
     public void addContact(Contact contact) {
+        if (contact == null) {
+            throw new IllegalArgumentException("contact cannot be null");
+        }
         contacts.add(contact);
     }
 
     public List<Contact> findAll() {
-        return contacts;
+        List<Contact> sortedContacts = new ArrayList<>(contacts);
+        sortedContacts.sort(Comparator.comparing(
+                Contact::getName,
+                Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER)
+        ));
+        return sortedContacts;
     }
 
     public List<Contact> searchContactsByName(String name) {
         List<Contact> results = new ArrayList<>();
 
+        if (name == null) {
+            return results;
+        }
+
         for (Contact contact : contacts) {
-            if (contact.getName().equalsIgnoreCase(name)) {
+            if (contact.getName() != null && contact.getName().equalsIgnoreCase(name)) {
                 results.add(contact);
             }
         }
@@ -40,6 +53,10 @@ public class ContactRepository {
     }
 
     public boolean updateContact(Contact updatedContact) {
+        if (updatedContact == null) {
+            return false;
+        }
+
         Contact existingContact = findContactById(updatedContact.getId());
 
         if (existingContact == null) {
@@ -55,6 +72,13 @@ public class ContactRepository {
 
     public boolean deleteContactById(int id) {
         return contacts.removeIf(contact -> contact.getId() == id);
+    }
+
+    public int getMaxId() {
+        return contacts.stream()
+                .mapToInt(Contact::getId)
+                .max()
+                .orElse(0);
     }
 
 }
