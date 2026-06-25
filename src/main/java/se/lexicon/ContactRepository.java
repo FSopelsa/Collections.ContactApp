@@ -74,6 +74,11 @@ public class ContactRepository {
         return contacts.removeIf(contact -> contact.getId() == id);
     }
 
+    public void setAll(List<Contact> newContacts) {
+        contacts.clear();
+        contacts.addAll(newContacts);
+    }
+
     public int getMaxId() {
         return contacts.stream()
                 .mapToInt(Contact::getId)

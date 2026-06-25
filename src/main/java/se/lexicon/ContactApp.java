@@ -9,6 +9,8 @@ public class ContactApp {
     public static final Scanner scanner = new Scanner(System.in);
     public static final ContactRepository repository =
             new ContactRepository();
+    private static final ContactFileHandler fileHandler = new ContactFileHandler();
+    private static final String FILE_PATH = "contacts.csv";
 
     private static int nextId = 1;
 
@@ -16,6 +18,14 @@ public class ContactApp {
 
         System.out.println("--------------------------------");
         System.out.println("Welcome to Contact Manager");
+
+        try {
+            List<Contact> loadedContacts = fileHandler.loadContacts(FILE_PATH);
+            repository.setAll(loadedContacts);
+            System.out.println("Contacts loaded.");
+        } catch (Exception e) {
+            System.out.println("Error loading contacts: " + e.getMessage());
+        }
 
         nextId = repository.getMaxId() + 1;
 
@@ -33,6 +43,14 @@ public class ContactApp {
                 case "6" -> running = false;
             }
         }
+
+        try {
+            fileHandler.saveContacts(repository.findAll(), FILE_PATH);
+            System.out.println("Contacts saved.");
+        } catch (Exception e) {
+            System.out.println("Error saving contacts: " + e.getMessage());
+        }
+        System.out.println("Exiting...");
     }
 
     private static void showMenu() {
